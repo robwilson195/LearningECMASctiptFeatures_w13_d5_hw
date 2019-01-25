@@ -1,21 +1,41 @@
 const PubSub = require('../helpers/pub_sub.js');
 
-const InstrumentFamilies = function (data) {
-  this.data = data;
-};
+class InstrumentFamilies {
 
-InstrumentFamilies.prototype.bindEvents = function () {
-  PubSub.publish('InstrumentFamilies:data-ready', this.data);
+  constructor(data) {
+    this.data = data;
+  }
 
-  PubSub.subscribe('SelectView:change', (evt) => {
-    const selectedIndex = evt.detail;
-    this.publishFamilyDetail(selectedIndex);
-  });
-};
+  bindEvents() {
+    PubSub.publish('InstrumentFamilies:data-ready', this.data);
+    PubSub.subscribe('SelectView:change', (evt) => {
+      const selectedIndex = evt.detail;
+      this.publishFamilyDetail(selectedIndex);
+    });
+  }
 
-InstrumentFamilies.prototype.publishFamilyDetail = function (selectedIndex) {
-  const selectedFamily = this.data[selectedIndex];
-  PubSub.publish('InstrumentFamilies:selected-family-ready', selectedFamily)
-};
+  publishFamilyDetail(selectedIndex) {
+    const selectedFamily = this.data[selectedIndex];
+    PubSub.publish('InstrumentFamilies:selected-family-ready', selectedFamily)
+  }
+}
+
+// const InstrumentFamilies = function (data) {
+//   this.data = data;
+// };
+//
+// InstrumentFamilies.prototype.bindEvents = function () {
+//   PubSub.publish('InstrumentFamilies:data-ready', this.data);
+//
+//   PubSub.subscribe('SelectView:change', (evt) => {
+//     const selectedIndex = evt.detail;
+//     this.publishFamilyDetail(selectedIndex);
+//   });
+// };
+//
+// InstrumentFamilies.prototype.publishFamilyDetail = function (selectedIndex) {
+//   const selectedFamily = this.data[selectedIndex];
+//   PubSub.publish('InstrumentFamilies:selected-family-ready', selectedFamily)
+// };
 
 module.exports = InstrumentFamilies;
